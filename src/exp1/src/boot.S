@@ -17,7 +17,7 @@ _start:
 	mrs	x0, mpidr_el1		
 	and	x0, x0, #0xFF		// Check processor id
 	cbz	x0, master			// Hang for all non-primary CPU. cbz=jump if result of previously executed operation == 0
-	b	proc_hang
+	b	proc_hang			// if x0 jump to master else go to proc_hang
 
 proc_hang: 
 	b 	proc_hang
