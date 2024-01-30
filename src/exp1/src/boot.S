@@ -20,7 +20,7 @@ _start:
 	b	proc_hang			// if x0 jump to master else go to proc_hang
 
 proc_hang: 
-	b 	proc_hang
+	b 	proc_hang			//infinite loop
 
 # If the current processor ID is 0, then execution branches to the `master` function
 master:
@@ -31,7 +31,7 @@ master:
 	# The `memzero` function accepts only two arguments: the start address (`bss_begin`) 
 	# and the size of the section needed to be cleaned (`bss_end - bss_begin`).
 	#	bss_begin/end are defined in the linker script
-	adr	x0, bss_begin
+	adr	x0, bss_begin	//bss_begin symbols defined in linker script and be referenced in source code
 	adr	x1, bss_end
 	sub	x1, x1, x0
 	bl 	memzero
