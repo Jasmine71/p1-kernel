@@ -24,7 +24,9 @@ master:
 	// prep for the ``eret'' (exception return) instruction below. 
 
 #ifdef USE_QEMU 			// --> QEMU boots from EL2. cannot do things to EL3			
-	ldr	x0, =SPSR_VALUE		// SPSR_VALUE is a constant value. spsr_el2 controls the consequence of exception return (eret), including the new exception level (EL1)
+	ldr	x0, #0	
+	//ldr	x0, =SPSR_VALUE		// SPSR_VALUE is a constant value. spsr_el2 controls the consequence of exception return (eret), including the new exception level (EL1)
+	// SPSR_VALUE is a constant value. spsr_el2 controls the consequence of exception return (eret), including the new exception level (EL1)
 	msr	spsr_el2, x0		// make sure to check out the def of SPSR_VALUE (include/arm/sysregs.h)
 							// move x0 to spsr_el2
 
@@ -57,7 +59,7 @@ master:
   
 	eret					// exception return (switch EL and go to address elr_el2 = line67)
 
-el1_entry_another:
+el1_entry_another: 
 	adr	x0, bss_begin
 	adr	x1, bss_end
 	sub	x1, x1, x0
@@ -65,5 +67,7 @@ el1_entry_another:
 
 el1_entry:
 	mov	sp, #LOW_MEMORY
+	mrs x0, CurrentEL 
 	bl	kernel_main		// kernel.c
 	b 	proc_hang		// should never come here
+	
