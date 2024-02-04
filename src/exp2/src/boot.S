@@ -24,8 +24,9 @@ master:
 	// prep for the ``eret'' (exception return) instruction below. 
 
 #ifdef USE_QEMU 			// --> QEMU boots from EL2. cannot do things to EL3			
-	ldr	x0, =SPSR_VALUE		// spsr_el2 controls the consequence of exception return (eret), including the new exception level (EL1)
+	ldr	x0, =SPSR_VALUE		// SPSR_VALUE is a constant value. spsr_el2 controls the consequence of exception return (eret), including the new exception level (EL1)
 	msr	spsr_el2, x0		// make sure to check out the def of SPSR_VALUE (include/arm/sysregs.h)
+							// move x0 to spsr_el2
 
 	// Below, elr means ``exception link register''; and elr_el2 is its copy accessible at EL2. 
 	// elr_el2 points to the first instruction to be executed once the CPU reaches the new exception level after executing ``eret''.
@@ -41,8 +42,8 @@ master:
 	//				instructions that are illegal at EL0 (e.g. MSR/MRS), CPU will trigger exceptions. 
 	//			    And since you haven't implemented any exception handlers, the kernel will enter la-la land...	
 
-	adr x0, el1_entry
-	msr	elr_el2, x0
+	adr x0, el1_entry		//move the address of symbol 'el1_entry' to x0
+	msr	elr_el2, x0			//
 #else 						// --> Rpi3 hw boots from EL3. 
 	ldr	x0, =SCR_VALUE		// Secure Configuration (EL3 only) 
 	msr	scr_el3, x0
@@ -54,7 +55,7 @@ master:
 	msr	elr_el3, x0
 #endif
   
-	eret					// exception return
+	eret					// exception return (switch EL and go to address elr_el2 = line67)
 
 el1_entry_another:
 	adr	x0, bss_begin

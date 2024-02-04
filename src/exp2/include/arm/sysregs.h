@@ -36,7 +36,7 @@
 // ***************************************
 
 #define SPSR_MASK_ALL 		(7 << 6)
-#define SPSR_EL1h			(5 << 0)
+#define SPSR_EL1h			(5 << 0) //determine when do eret, will go to EL1
 #define SPSR_VALUE			(SPSR_MASK_ALL | SPSR_EL1h)
 
 #endif
