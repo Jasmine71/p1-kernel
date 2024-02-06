@@ -67,7 +67,6 @@ el1_entry_another:
 
 el1_entry:
 	mov	sp, #LOW_MEMORY
-	mrs x0, CurrentEL 
 	bl	kernel_main		// kernel.c
 	b 	proc_hang		// should never come here
 	
