@@ -55,3 +55,8 @@ void handle_irq(void)
             printf("Unknown pending irq: %x\r\n", irq);
     }
 }
+
+void handle_exp(void)
+{
+    
+}
