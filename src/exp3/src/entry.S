@@ -187,7 +187,7 @@ vectors_el2:
 	// EL1_64 -- Exception is taken from EL1 executing in 64-bit mode. 
 	//this is my exception defined
 	//		The exceptions caused in 64-bit user programs
-	ventry	sync_invalid_el1_64			
+	ventry	el1_exp	// exception 
 	ventry	irq_invalid_el1_64			
 	ventry	fiq_invalid_el1_64			
 	ventry	error_invalid_el1_64			
@@ -198,7 +198,52 @@ vectors_el2:
 	ventry	irq_invalid_el1_32			
 	ventry	fiq_invalid_el1_32			
 	ventry	error_invalid_el1_32			
-	
+
+sync_invalid_el2t:
+	handle_invalid_entry  SYNC_INVALID_EL2t
+
+irq_invalid_el2t:
+	handle_invalid_entry  IRQ_INVALID_EL2t
+
+fiq_invalid_el2t:
+	handle_invalid_entry  FIQ_INVALID_EL2t
+
+error_invalid_el2t:
+	handle_invalid_entry  ERROR_INVALID_EL2t
+
+sync_invalid_el2h:
+	handle_invalid_entry  SYNC_INVALID_EL2h
+
+irq_invalid_el2h:
+	handle_invalid_entry  IRQ_INVALID_EL2h
+
+fiq_invalid_el2h:
+	handle_invalid_entry  FIQ_INVALID_EL2h
+
+error_invalid_el2h:
+	handle_invalid_entry  ERROR_INVALID_EL2h
+
+irq_invalid_el1_64:
+	handle_invalid_entry  IRQ_INVALID_EL1_64
+
+fiq_invalid_el1_64:
+	handle_invalid_entry  FIQ_INVALID_EL1_64
+
+error_invalid_el1_64:
+	handle_invalid_entry  ERROR_INVALID_EL1_64
+
+sync_invalid_el1_32:
+	handle_invalid_entry  SYNC_INVALID_EL1_32
+
+irq_invalid_el1_32:
+	handle_invalid_entry  IRQ_INVALID_EL1_32
+
+fiq_invalid_el1_32:
+	handle_invalid_entry  FIQ_INVALID_EL1_32
+
+error_invalid_el1_32:
+	handle_invalid_entry  ERROR_INVALID_EL1_32
+
 
 el1_irq:
 	kernel_entry 
@@ -213,4 +258,9 @@ try_to_return:
 	mrs x1, elr_el1
 	add x1, x1, 4
 	msr elr_el1, x1
+	kernel_exit
+
+el1_exp:
+	kernel_entry
+	bl handle_exp
 	kernel_exit
