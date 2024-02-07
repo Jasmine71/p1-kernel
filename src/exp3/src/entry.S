@@ -172,7 +172,33 @@ error_invalid_el0_32:
 .globl vectors_el2
 vectors_el2:
 	/* --- add yours ---  */
+	//  EL2t -- Exception happens when CPU is at EL2 while the stack pointer (SP) was set to be shared with EL0
+	ventry	sync_invalid_el2t			
+	ventry	irq_invalid_el2t			
+	ventry	fiq_invalid_el2t			
+	ventry	error_invalid_el2t			
 
+	// EL2h -- Exception happens at EL2 at the time when a dedicated SP was allocated for EL2.
+	ventry	sync_invalid_el2h			
+	ventry	irq_invalid_el2h				
+	ventry	fiq_invalid_el2h			
+	ventry	error_invalid_el2h			
+
+	// EL1_64 -- Exception is taken from EL1 executing in 64-bit mode. 
+	//this is my exception defined
+	//		The exceptions caused in 64-bit user programs
+	ventry	sync_invalid_el1_64			
+	ventry	irq_invalid_el1_64			
+	ventry	fiq_invalid_el1_64			
+	ventry	error_invalid_el1_64			
+
+	// EL1_32 -- Exception is taken from EL1 executing in 32-bit mode
+	//		The exceptions caused in 32-bit user programs
+	ventry	sync_invalid_el1_32			
+	ventry	irq_invalid_el1_32			
+	ventry	fiq_invalid_el1_32			
+	ventry	error_invalid_el1_32			
+	
 
 el1_irq:
 	kernel_entry 
