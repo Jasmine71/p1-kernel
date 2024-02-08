@@ -19,14 +19,20 @@ master:
 	msr	sctlr_el1, x0		
 
 	ldr	x0, =HCR_VALUE  	// Hypervisor Configuration (EL2) 
-	msr	hcr_el2, x0  
+	msr	hcr_el2, x0
+
+	mov	sp, #HIGH_MEMORY	//initialize sp_el2
+
 
 #ifdef USE_QEMU 			// QEMU boots from EL2. cannot do things to EL3			
 	ldr	x0, =SPSR_VALUE		// SPSR_VALUE controls the consequence of exception return (eret), including the new exception level (EL1)
 	msr	spsr_el2, x0
 
 	adr	x0, el1_entry		
-	msr	elr_el2, x0			
+	msr	elr_el2, x0	
+
+	adr	x0, vectors_el2	    //let CPU aware of vector table el2 	
+	msr	vbar_el2, x0		
 
 #else 						// Rpi3 hw boots from EL3. 
 	ldr	x0, =SCR_VALUE		// Secure config register. Only at EL3.
@@ -47,6 +53,6 @@ el1_entry:
 	sub	x1, x1, x0
 	bl 	memzero	
 
-	mov	sp, #LOW_MEMORY
+	mov	sp, #LOW_MEMORY //initialize sp_el1
 	bl	kernel_main
 	b 	proc_hang		// should never come here

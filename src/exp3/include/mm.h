@@ -9,6 +9,8 @@
 #define SECTION_SIZE			(1 << SECTION_SHIFT)	
 
 #define LOW_MEMORY              	(2 * SECTION_SIZE)
+#define HIGH_MEMORY              	(4 * SECTION_SIZE)
+
 
 #ifndef __ASSEMBLER__
 
