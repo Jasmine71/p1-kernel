@@ -5,16 +5,21 @@
 #include "utils.h"
 
 
+
 void kernel_main(void)
 {
 	uart_init();
 	init_printf(0, putc);
 	printf("kernel boots...\n");
 
-	irq_vector_init();
-	generic_timer_init();
+	//irq_vector_init();
+	//generic_timer_init();
 	enable_interrupt_controller();
 	enable_irq();
+	
+	printf("going to call hvc...\n");
+	asm("hvc #0");
+	printf("we're back!\n");
 
 	// FL (2/1/23): the following are some ideas for triggering exceptions. But do they work? 
 	// Validate your guess by searching into aarch64 manuals and/or debugging. 

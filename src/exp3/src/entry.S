@@ -51,6 +51,7 @@
 	str	x30, [sp, #16 * 15] 
 	.endm
 
+
 	// A mirror of kernel_entry, to be called as the last thing of an exception handler
 	.macro	kernel_exit
 	// restores the CPU state by copying back the values of x0 - x30
@@ -261,6 +262,13 @@ try_to_return:
 	kernel_exit
 
 el1_exp:
+	// saving sp_el1
+	//mrs x0, sp_el1 
+    //stp x0, lr, [sp, #-16]! 
+	//msr sp_el2, x0
 	kernel_entry
 	bl handle_exp
+	// Restore the EL1 context
+    // ldp x0, lr, [sp], #16 // Restore SP_EL1 and ELR_EL2
+    // msr sp_el1, x0 
 	kernel_exit

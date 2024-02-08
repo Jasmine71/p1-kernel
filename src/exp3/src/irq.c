@@ -58,5 +58,6 @@ void handle_irq(void)
 
 void handle_exp(void)
 {
-    
+    int el = get_el();
+    printf("Handle exception at exception level: %d \r\n", el);
 }
