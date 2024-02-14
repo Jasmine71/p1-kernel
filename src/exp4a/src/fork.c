@@ -16,6 +16,7 @@ int copy_process(unsigned long fn, unsigned long arg)
 	p->priority = current->priority;
 	p->state = TASK_RUNNING;
 	p->counter = p->priority;	/* inherit priority. default: 1. see sched.h */
+	p->sleep_time = current->sleep_time;
 
 	// Here `cpu_context` is initialized. 
 	p->cpu_context.x19 = fn;
