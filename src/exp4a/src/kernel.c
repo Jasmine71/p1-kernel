@@ -81,7 +81,9 @@ void kernel_main(void)
 		return;
 	}
 
-	while (1) {
-		schedule();
-	}	
+	// while (1) {
+	// 	schedule();
+	// }	
+	schedule(); //run task 1
+	
 }

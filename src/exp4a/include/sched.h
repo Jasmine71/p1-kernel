@@ -22,7 +22,7 @@
 */
 #define TASK_RUNNING				0
 /* TODO: define more task states (as constants) below, e.g. TASK_WAIT */
-#define WAIt                        1
+#define TASK_WAIT                   1
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
@@ -52,6 +52,7 @@ struct task_struct {
 	long counter;	// how long this task has been running? decreases by 1 each timer tick. Reaching 0, kernel will attempt to schedule another task. Support our simple sched
 	long priority;	// when kernel schedules a new task, the kernel copies the task's  `priority` value to `counter`. Regulate CPU time the task gets relative to other tasks 
 	long preempt_count; // a flag. A non-zero means that the task is executing in a critical code region cannot be interrupted, Any timer tick should be ignored and not triggering rescheduling
+	long sleep_time; //the time a task want to turn CPU down
 };
 
 extern void sched_init(void);
@@ -61,6 +62,7 @@ extern void schedule(void);
 //extern void preempt_enable(void);
 extern void switch_to(struct task_struct* next);
 extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
+extern void sleep(int time);
 
 // the initial values for task_struct that belongs to the init task. see sched.c 
 #define INIT_TASK 									\
@@ -70,6 +72,7 @@ extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
 	0,	/* counter */								\
 	1,	/* priority */								\
 	0 	/* preempt_count */							\
+	0   /* sleep_time */							\
 }
 
 #endif
