@@ -22,6 +22,7 @@
 */
 #define TASK_RUNNING				0
 /* TODO: define more task states (as constants) below, e.g. TASK_WAIT */
+#define WAIt                        1
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
