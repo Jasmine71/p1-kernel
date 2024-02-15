@@ -29,6 +29,10 @@ int find_mini_sleep(){
 			}
 			
 		}
+		if(global_min == 1000){
+			//no any WAIT tasks
+			global_min = 3;
+		}
 		return global_min;
 }
 
@@ -49,7 +53,7 @@ void update_sleep(){
 		if(p && p->state == TASK_WAIT){
 			if(p->future_time <= p->sleep_time){
 				p->sleep_time = p->sleep_time - p->future_time;
-				// printf("updated in %u ticks\n\r", p->sleep_time);
+				// printf("updated in %u ticks with futue time %u\n\r", p->sleep_time, p->future_time);
 
 			}
 		}
@@ -66,17 +70,23 @@ void handle_generic_timer_irq( void )
 	update_sleep();
 
 	//check previous sleep() request
+	printf("Timer interrupt received ");
+
 	for(int i = 0; i < NR_TASKS; i++){
 		p = task[i];
 		if(p && p->state == TASK_WAIT && p->sleep_time == 0){
 			p->state = TASK_RUNNING;
+			printf(" One task wakes up. ");
+
 		}
 	}
 
 	int next_sleep_time = find_mini_sleep();
 	update_future(next_sleep_time);
-	gen_timer_reset(next_sleep_time * interval);	
-	printf(" Timer interrupt received. next in %u ticks\n\r", next_sleep_time);
+	gen_timer_reset(next_sleep_time * interval);
+	printf("\n");	
+	printf("Next irq in %u ticks\n\r", next_sleep_time);
+
 }
 
 
