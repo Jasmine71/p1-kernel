@@ -42,12 +42,16 @@ void process(char *array)
 			delay(CHAR_DELAY);
 		}
 
-		if (compare_string(array, "12345",5) == 0) {
+		if (compare_string(array, "12345",5) == 1) {
+			printf(" task1 call sleep(3)\n");
         	sleep(3); // Sleep for 3 seconds for task1
-		} else if (compare_string(array, "abcde",5) == 0) {
+		} 
+		if (compare_string(array, "abcde",5) == 1) {
+			printf(" task2 call sleep(5)\n");
 			sleep(5); // Sleep for 5 seconds for task2
 		}
 		int global_min = find_mini_sleep();
+		
 		update_future(global_min);
 		// update_sleep(global_min);
 		// printf("next irq in %u ticks\n\r", global_min);
@@ -97,5 +101,7 @@ void kernel_main(void)
 
 	while (1) {
 		schedule();
+		printf("Enter idle task\n");
+		asm volatile ("wfi");
 	}	
 }
