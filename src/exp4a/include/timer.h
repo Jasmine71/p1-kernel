@@ -9,8 +9,13 @@ void handle_timer_irq ( void );
 void generic_timer_init ( void );
 void handle_generic_timer_irq ( void );
 
+int find_mini_sleep();
+void update_sleep();
+void update_future(int new_future);
+
 extern void gen_timer_init();
 /* set timer to be fired after @interval System ticks */
 extern void gen_timer_reset(int interval); 
+extern int interval;
 
 #endif  /*_TIMER_H */
