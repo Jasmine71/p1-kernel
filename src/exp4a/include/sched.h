@@ -53,6 +53,7 @@ struct task_struct {
 	long priority;	// when kernel schedules a new task, the kernel copies the task's  `priority` value to `counter`. Regulate CPU time the task gets relative to other tasks 
 	long preempt_count; // a flag. A non-zero means that the task is executing in a critical code region cannot be interrupted, Any timer tick should be ignored and not triggering rescheduling
 	long sleep_time; //the time a task want to turn CPU down
+	long future_time;
 };
 
 extern void sched_init(void);
@@ -71,8 +72,9 @@ extern void sleep(int time);
 	0,	/* state */									\
 	0,	/* counter */								\
 	1,	/* priority */								\
-	0 	/* preempt_count */							\
-	0   /* sleep_time */							\
+	0, 	/* preempt_count */							\
+	0,   /* sleep_time */							\
+	0   /* future_time */							\
 }
 
 #endif
