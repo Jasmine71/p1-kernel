@@ -17,6 +17,8 @@ int copy_process(unsigned long fn, unsigned long arg)
 	p->state = TASK_RUNNING;
 	p->counter = p->priority;	/* inherit priority. default: 1. see sched.h */
 	p->sleep_time = current->sleep_time;
+	p->future_time = current->future_time;
+
 
 	// Here `cpu_context` is initialized. 
 	p->cpu_context.x19 = fn;
@@ -28,4 +30,13 @@ int copy_process(unsigned long fn, unsigned long arg)
 	int pid = nr_tasks++;
 	task[pid] = p;	
 	return 0;
+}
+
+int compare_string(const char* str1, const char* str2, int len) {
+    for (int i = 0; i < len; i++) {
+        if (str1[i] != str2[i]) {
+            return 0; // Strings are not equal
+        }
+    }
+    return 1; // Strings are equal
 }
