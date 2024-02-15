@@ -16,6 +16,7 @@
 #define CHAR_DELAY (1000000)
 #endif
 
+
 void process(char *array)
 {
 #ifdef USE_LFB // (optional) determine the init locations on the graphical console
@@ -39,13 +40,26 @@ void process(char *array)
 				lfb_print_update(&scr_x, &scr_y, "\n");
 #endif
 			delay(CHAR_DELAY);
-		} 
+		}
+
+		if (compare_string(array, "12345",5) == 0) {
+        	sleep(3); // Sleep for 3 seconds for task1
+		} else if (compare_string(array, "abcde",5) == 0) {
+			sleep(5); // Sleep for 5 seconds for task2
+		}
+		int global_min = find_mini_sleep();
+		update_future(global_min);
+		// update_sleep(global_min);
+		// printf("next irq in %u ticks\n\r", global_min);
+		gen_timer_reset(global_min * interval);	
 		schedule(); // yield
 	}
 
 	// For now, all the tasks run in an infinite loop and never returns. 
 	// We will handle task termination in future experiments
 }
+
+
 
 void kernel_main(void)
 {
@@ -81,9 +95,7 @@ void kernel_main(void)
 		return;
 	}
 
-	// while (1) {
-	// 	schedule();
-	// }	
-	schedule(); //run task 1
-	
+	while (1) {
+		schedule();
+	}	
 }
