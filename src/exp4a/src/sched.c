@@ -11,7 +11,7 @@ void _schedule(void)
 {
 	int next, c;
 	struct task_struct * p;
-	Boolean has_task_running false;
+	int has_task_running = 0;
 	while (1) {
 		c = -1;	// the maximum counter found so far
 		next = 0;
@@ -24,7 +24,7 @@ void _schedule(void)
 		for (int i = 0; i < NR_TASKS; i++){
 			p = task[i];
 			if (p && p->state == TASK_RUNNING && p->counter > c) { /* NB: p->counter always be non negative */
-				has_task_running = true;
+				has_task_running = 1;
 				c = p->counter;
 				next = i;
 			}
@@ -35,30 +35,31 @@ void _schedule(void)
 
 		/* If no such task is found, this is either because i) no 
 		task is in TASK_RUNNING state or*/
-		if(!has_task_running){
+		if(has_task_running){
+			next = 0;
 
 		}
 		/*ii) all such tasks have 0 counters.
 		in our current implemenation which misses TASK_WAIT, only condition ii) is possible. 
 		Hence, we recharge counters. Bump counters for all tasks once. */
-		else{
-			for (int i = 0; i < NR_TASKS; i++) {
-				p = task[i];
-				if (p) {
-					p->counter = (p->counter >> 1) + p->priority; // The increment depends on a task's priority.
-				}
+		
+		for (int i = 0; i < NR_TASKS; i++) {
+			p = task[i];
+			if (p) {
+				p->counter = (p->counter >> 1) + p->priority; // The increment depends on a task's priority.
 			}
 		}
-		
 
 		/* loops back to pick the next task */
 	}
+	// printf("switch to task %u\r\n", next);
 	switch_to(task[next]);
+	
 }
 
 void schedule(void)
 {
-	// current->counter = 0;
+	current->counter = 0;
 	_schedule();
 }
 
@@ -70,6 +71,8 @@ void switch_to(struct task_struct * next)
 	struct task_struct * prev = current;
 	current = next;
 	cpu_switch_to(prev, next); // do context switch
+	
+
 }
 
 void schedule_tail(void) {
@@ -77,8 +80,8 @@ void schedule_tail(void) {
 }
 
 void sleep(int time){
+	// printf("task sleep\n\r");
 	current->state = TASK_WAIT;
 	current->sleep_time = time;
-	_schedule();
 }
 
