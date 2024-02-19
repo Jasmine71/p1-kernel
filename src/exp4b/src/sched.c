@@ -110,3 +110,7 @@ void timer_tick()
 	/* disable irq until kernel_exit, in which eret will resort the interrupt flag from spsr, which sets it on. */
 	disable_irq(); 
 }
+
+int getpid(){
+	return (int)current->pid;	
+}

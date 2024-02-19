@@ -40,6 +40,7 @@ struct task_struct {
 	long counter; /* countdown for scheduling. higher value means having run for less. recharged in schedule(). decremented in timer_tick(). always non negative */
 	long priority;
 	long preempt_count;
+	long pid;
 };
 
 extern void sched_init(void);
@@ -52,7 +53,7 @@ extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
 
 #define INIT_TASK \
 /*cpu_context*/	{ {0,0,0,0,0,0,0,0,0,0,0,0,0}, \
-/* state etc */	0,0,1, 0 \
+/* state etc */	0,0,1, 0,0 \
 }
 
 #endif
