@@ -1,10 +1,13 @@
 #include "sched.h"
 #include "irq.h"
 #include "printf.h"
+#include "fork.h"
 
 static struct task_struct init_task = INIT_TASK;
 struct task_struct *current = &(init_task);
 struct task_struct * task[NR_TASKS] = {&(init_task), };
+struct trace_log *log = (void*)0;
+struct context_switch *cur_entry = (void*)0;
 int nr_tasks = 1;
 
 void preempt_disable(void)
@@ -106,7 +109,9 @@ void timer_tick()
 	/* Note: we just came from an interrupt handler and CPU just automatically disabled all interrupts. 
 		Now call scheduler with interrupts enabled */
 	enable_irq();
+	printf("\nswitch from task %u\r\n", getpid());
 	_schedule();
+	printf("\nswitch back from task %u\r\n", getpid());
 	/* disable irq until kernel_exit, in which eret will resort the interrupt flag from spsr, which sets it on. */
 	disable_irq(); 
 }

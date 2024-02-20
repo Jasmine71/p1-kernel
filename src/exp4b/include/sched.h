@@ -17,8 +17,10 @@
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
-extern int nr_tasks;
 extern struct trace_log *log;
+extern struct context_switch *cur_entry;
+extern int nr_tasks;
+
 
 struct cpu_context {
 	unsigned long x19;

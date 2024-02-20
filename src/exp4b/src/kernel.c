@@ -89,6 +89,8 @@ void kernel_main(void)
 	}
 
 	while (1){
+		printf("enter\n");
 		schedule();
+		printf("leave\n");
 	}	
 }

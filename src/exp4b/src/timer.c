@@ -27,6 +27,11 @@ void generic_timer_init ( void )
 
 void handle_generic_timer_irq( void ) 
 {
+	if(log->index == 50){
+		//Todo: print and disable irq
+		return;
+	}
+	//record task_from id and cur_ms when irq happened
 	// unsigned long cur_ms = get_time_ms();
 	gen_timer_reset(interval / 10);
     timer_tick();
