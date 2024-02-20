@@ -25,3 +25,7 @@ int copy_process(unsigned long fn, unsigned long arg)
 	preempt_enable();
 	return 0;
 }
+
+int create_trace(){
+	
+}

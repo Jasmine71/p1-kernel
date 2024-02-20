@@ -8,6 +8,7 @@
 #define THREAD_SIZE				4096
 
 #define NR_TASKS				64 
+#define NUM_TRACES              50
 
 #define FIRST_TASK task[0]
 #define LAST_TASK task[NR_TASKS-1]
@@ -16,6 +17,7 @@
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
+extern struct context_switch * trace[NUM_TRACES];
 extern int nr_tasks;
 
 struct cpu_context {
@@ -43,6 +45,16 @@ struct task_struct {
 	long pid;
 };
 
+struct context_switch{
+	unsigned long cur_time; //ms
+	int id_from;
+	int id_to;
+	unsigned long pc_from;
+	unsigned long pc_to;
+	unsigned long sp_from;
+	unsigned long sp_to;
+};
+
 extern void sched_init(void);
 extern void schedule(void);
 extern void timer_tick(void);
@@ -50,6 +62,7 @@ extern void preempt_disable(void);
 extern void preempt_enable(void);
 extern void switch_to(struct task_struct* next);
 extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
+extern int getpid();
 
 #define INIT_TASK \
 /*cpu_context*/	{ {0,0,0,0,0,0,0,0,0,0,0,0,0}, \
