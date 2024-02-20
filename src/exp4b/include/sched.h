@@ -17,8 +17,8 @@
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
-extern struct context_switch * trace[NUM_TRACES];
 extern int nr_tasks;
+extern struct trace_log *log;
 
 struct cpu_context {
 	unsigned long x19;
@@ -53,6 +53,11 @@ struct context_switch{
 	unsigned long pc_to;
 	unsigned long sp_from;
 	unsigned long sp_to;
+};
+
+struct trace_log{
+	struct context_switch * trace[NUM_TRACES];
+	int index;
 };
 
 extern void sched_init(void);

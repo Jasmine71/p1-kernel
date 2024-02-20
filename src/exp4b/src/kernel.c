@@ -82,6 +82,12 @@ void kernel_main(void)
 		return;
 	}
 
+	log = create_log();
+	if(log == (void*)0){
+		printf("error while creating context switch trace log");
+		return;
+	}
+
 	while (1){
 		schedule();
 	}	

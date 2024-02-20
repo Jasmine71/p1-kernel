@@ -27,7 +27,7 @@ void generic_timer_init ( void )
 
 void handle_generic_timer_irq( void ) 
 {
-	unsigned long cur_ms = get_time_ms();
+	// unsigned long cur_ms = get_time_ms();
 	gen_timer_reset(interval / 10);
     timer_tick();
 }
