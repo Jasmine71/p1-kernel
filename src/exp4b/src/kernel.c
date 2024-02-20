@@ -48,6 +48,8 @@ void process4(char *array)
 
 void kernel_main(void)
 {
+	
+
 	uart_init();
 	init_printf(0, putc);
 
@@ -57,6 +59,7 @@ void kernel_main(void)
 	generic_timer_init();
 	enable_interrupt_controller();
 	enable_irq();
+	start_tick =  (unsigned long)get_CNTPCT_EL0();
 
 	int res = copy_process((unsigned long)&process, (unsigned long)"12345");
 	if (res != 0) {

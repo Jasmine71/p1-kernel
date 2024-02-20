@@ -10,6 +10,10 @@ int interval = (1 << 26); // xzl: around 1 sec
 int interval = 1 * 1000 * 1000; // xzl: around 1 sec
 #endif
 
+unsigned long start_tick = 0;// count value not ms
+unsigned long frequency = 0;
+
+
 /* 	These are for Arm generic timer. 
 	They are fully functional on both QEMU and Rpi3 
 	Recommended.
@@ -18,12 +22,13 @@ void generic_timer_init ( void )
 {
 	printf("interval is set to: %u\r\n", interval);
 	gen_timer_init();
-	gen_timer_reset(interval);
+	gen_timer_reset(interval / 10);
 }
 
 void handle_generic_timer_irq( void ) 
 {
-	gen_timer_reset(interval);
+	unsigned long cur_ms = get_time_ms();
+	gen_timer_reset(interval / 10);
     timer_tick();
 }
 
@@ -51,4 +56,14 @@ void handle_timer_irq( void )
 	put32(TIMER_C1, curVal);
 	put32(TIMER_CS, TIMER_CS_M1);
 	timer_tick();
+}
+
+unsigned long get_time_ms(){
+	unsigned long cur_tick = (unsigned long)get_CNTPCT_EL0();
+	// printf("irq happen tick : %u \r\n", cur_tick);
+	unsigned long diff = cur_tick - start_tick;
+	if(frequency == 0){
+		frequency = diff; //100 ms
+	}
+	return diff / frequency * 100;
 }

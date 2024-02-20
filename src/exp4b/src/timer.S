@@ -16,3 +16,8 @@ gen_timer_init:
 gen_timer_reset:
 	msr CNTP_TVAL_EL0, x0
     ret
+
+.global get_CNTPCT_EL0
+get_CNTPCT_EL0:
+	mrs x0, CNTPCT_EL0
+	ret
