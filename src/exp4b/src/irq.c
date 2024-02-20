@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "entry.h"
 #include "peripherals/irq.h"
+#include "sched.h"
 
 const char *entry_error_messages[] = {
     "SYNC_INVALID_EL1t",
@@ -49,3 +50,26 @@ void handle_irq(void)
             printf("Unknown pending irq: %x\r\n", irq);
     }
 }
+ void task_from(void){
+    cur_entry = log->trace[log->index];
+    unsigned long cur_ms = get_time_ms();
+	int id_from = getpid();
+    unsigned long sp_value = get_sp();
+    unsigned long pc_value = get_pc();
+	cur_entry->cur_time = cur_ms;
+	cur_entry->id_from = id_from;
+    cur_entry->sp_from = sp_value;
+    cur_entry->pc_from = pc_value;
+
+ }
+
+ void task_to(void){
+    cur_entry = log->trace[log->index];
+    int id_to = getpid();
+    unsigned long sp_value = get_sp();
+    unsigned long pc_value = get_pc();
+    cur_entry->id_to = id_to;
+    cur_entry->sp_to = sp_value;
+    cur_entry->pc_to = pc_value;
+    log->index++;
+ }

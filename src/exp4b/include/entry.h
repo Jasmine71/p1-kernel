@@ -26,6 +26,8 @@
 #ifndef __ASSEMBLER__
 
 void ret_from_fork(void);
+unsigned long get_pc();
+unsigned long get_sp();
 
 #endif
 #endif

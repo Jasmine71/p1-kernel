@@ -138,8 +138,10 @@ error_invalid_el0_32:
 	handle_invalid_entry  ERROR_INVALID_EL0_32
 
 el1_irq:
+	bl  task_from
 	kernel_entry 
 	bl	handle_irq
+	bl  task_to
 	kernel_exit 
 
 .globl ret_from_fork
@@ -150,3 +152,13 @@ ret_from_fork:
 
 .globl err_hang
 err_hang: b err_hang
+
+.globl get_sp
+get_sp:
+	mov x0, sp
+	ret
+
+.globl get_pc
+get_pc:
+	mrs x0, elr_el1
+	ret
