@@ -36,12 +36,12 @@ void handle_generic_timer_irq( void )
 		preempt_disable();
 		for(int i = 0; i < 50; i++){
 			struct context_switch *entry = &log[i];
-			printf("%u from task%u (PC %x SP %x) to task%u (PC %x SP %x)\r\n", entry->cur_time,
+			printf("\n%u from task%u (PC 0x%x SP 0x%x) to task%u (PC 0x%x SP 0x%x)\r", entry->cur_time,
 			entry->id_from, entry->pc_from, entry->sp_from, entry->id_to,
 			entry->pc_to, entry->sp_to);
 		}
 		index_log = 0;
-		
+		disable_irq();
 		return;
 	}
 	gen_timer_reset(interval / 10);
