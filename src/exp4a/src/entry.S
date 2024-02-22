@@ -128,7 +128,9 @@ error_invalid_el0_32:
 
 el1_irq:
 	kernel_entry 
+	bl task_from
 	bl	handle_irq
+	bl task_to
 	kernel_exit 
 
 .globl ret_from_fork

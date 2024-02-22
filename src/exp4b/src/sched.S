@@ -21,5 +21,7 @@ cpu_switch_to:
 	ldp	x29, x9, [x8], #16
 	ldr	x30, [x8]				// load LR from memory ...
 	mov	sp, x9
+	//before jump to LR check the sp and pc to see if it is the first time
+	// bl check_sched_time
 	ret							// branch to LR (which was just loaded from memory)
 
