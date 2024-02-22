@@ -7,11 +7,12 @@
 #include "mini_uart.h"
 
 void process(char *array)
-{
+{	
 	while (1) {
 		for (int i = 0; i < 5; i++){
 			uart_send(array[i]);
 			delay(5000000);
+
 		}
 	}
 }
@@ -22,6 +23,7 @@ void process2(char *array)
 		for (int i = 0; i < 5; i++){
 			uart_send(array[i]);
 			delay(5000000);
+
 		}
 	}
 }
@@ -32,6 +34,7 @@ void process3(char *array)
 		for (int i = 0; i < 5; i++){
 			uart_send(array[i]);
 			delay(5000000);
+
 		}
 	}
 }
@@ -42,6 +45,7 @@ void process4(char *array)
 		for (int i = 0; i < 5; i++){
 			uart_send(array[i]);
 			delay(5000000);
+
 		}
 	}
 }
@@ -82,15 +86,10 @@ void kernel_main(void)
 		return;
 	}
 
-	log = create_log();
-	if(log == (void*)0){
-		printf("error while creating context switch trace log");
-		return;
-	}
 
 	while (1){
-		printf("enter\n");
 		schedule();
-		printf("leave\n");
+		task_to();
+		task_from();
 	}	
 }

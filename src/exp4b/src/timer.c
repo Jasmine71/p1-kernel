@@ -3,6 +3,9 @@
 #include "sched.h"
 #include "peripherals/timer.h"
 #include "timer.h"
+#include "irq.h"
+
+
 
 #ifdef USE_QEMU
 int interval = (1 << 26); // xzl: around 1 sec
@@ -27,12 +30,20 @@ void generic_timer_init ( void )
 
 void handle_generic_timer_irq( void ) 
 {
-	if(log->index == 50){
+	if(index_log == 50){
 		//Todo: print and disable irq
+		disable_irq();
+		preempt_disable();
+		for(int i = 0; i < 50; i++){
+			struct context_switch *entry = &log[i];
+			printf("%u from task%u (PC %x SP %x) to task%u (PC %x SP %x)\r\n", entry->cur_time,
+			entry->id_from, entry->pc_from, entry->sp_from, entry->id_to,
+			entry->pc_to, entry->sp_to);
+		}
+		index_log = 0;
+		
 		return;
 	}
-	//record task_from id and cur_ms when irq happened
-	// unsigned long cur_ms = get_time_ms();
 	gen_timer_reset(interval / 10);
     timer_tick();
 }

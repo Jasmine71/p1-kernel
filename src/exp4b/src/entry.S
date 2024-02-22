@@ -138,8 +138,8 @@ error_invalid_el0_32:
 	handle_invalid_entry  ERROR_INVALID_EL0_32
 
 el1_irq:
-	bl  task_from
 	kernel_entry 
+	bl  task_from
 	bl	handle_irq
 	bl  task_to
 	kernel_exit 

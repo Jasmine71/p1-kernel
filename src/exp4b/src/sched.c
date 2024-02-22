@@ -6,9 +6,11 @@
 static struct task_struct init_task = INIT_TASK;
 struct task_struct *current = &(init_task);
 struct task_struct * task[NR_TASKS] = {&(init_task), };
-struct trace_log *log = (void*)0;
-struct context_switch *cur_entry = (void*)0;
+struct context_switch log[NUM_TRACES];
+// struct trace_log *log = (void*)0;
+// struct context_switch *cur_entry = (void*)0;
 int nr_tasks = 1;
+int index_log = 0;
 
 void preempt_disable(void)
 {
@@ -61,6 +63,8 @@ void _schedule(void)
 			}
 		}
 	}
+	// printf("current %u next %u\n", current->pid, task[next]->pid);
+	check_sched_time(task[next]);
 	switch_to(task[next]);
 	preempt_enable();
 }
@@ -109,13 +113,27 @@ void timer_tick()
 	/* Note: we just came from an interrupt handler and CPU just automatically disabled all interrupts. 
 		Now call scheduler with interrupts enabled */
 	enable_irq();
-	printf("\nswitch from task %u\r\n", getpid());
+	// printf("\nswitch from task %u\r\n", getpid());
 	_schedule();
-	printf("\nswitch back from task %u\r\n", getpid());
+	// printf("\nswitch back from task %u\r\n", getpid());
 	/* disable irq until kernel_exit, in which eret will resort the interrupt flag from spsr, which sets it on. */
 	disable_irq(); 
 }
 
 int getpid(){
 	return (int)current->pid;	
+}
+
+void check_sched_time(struct task_struct * next){
+	//first time
+	if(next->first_time == 0){
+		next->first_time = 1;
+        struct context_switch *cur_entry = &log[index_log];
+        int id_to = next->pid; 
+        cur_entry->id_to = id_to;
+        cur_entry->sp_to = next->init_sp;
+		cur_entry->pc_to = next->init_pc;
+		// printf("\nindex %u record task to %u sp: %X pc:%X \r\n",index_log, id_to, cur_entry->sp_to , cur_entry->pc_to);
+        index_log++;
+	}
 }

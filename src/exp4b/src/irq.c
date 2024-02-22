@@ -51,25 +51,32 @@ void handle_irq(void)
     }
 }
  void task_from(void){
-    cur_entry = log->trace[log->index];
-    unsigned long cur_ms = get_time_ms();
-	int id_from = getpid();
-    unsigned long sp_value = get_sp();
-    unsigned long pc_value = get_pc();
-	cur_entry->cur_time = cur_ms;
-	cur_entry->id_from = id_from;
-    cur_entry->sp_from = sp_value;
-    cur_entry->pc_from = pc_value;
+    if(index_log < 50){
+        struct context_switch *cur_entry = &log[index_log];
+        unsigned long cur_ms = get_time_ms();
+        int id_from = getpid();
+        unsigned long sp_value = get_sp();
+        unsigned long pc_value = get_pc();
+        // printf("\n index %u record task from %u sp: %X pc:%X at time :%u\r\n", index_log, id_from, sp_value, pc_value, cur_ms);
+        cur_entry->cur_time = cur_ms;
+        cur_entry->id_from = id_from;
+        cur_entry->sp_from = sp_value;
+        cur_entry->pc_from = pc_value;
+    } 
 
  }
 
  void task_to(void){
-    cur_entry = log->trace[log->index];
-    int id_to = getpid();
-    unsigned long sp_value = get_sp();
-    unsigned long pc_value = get_pc();
-    cur_entry->id_to = id_to;
-    cur_entry->sp_to = sp_value;
-    cur_entry->pc_to = pc_value;
-    log->index++;
+    if(index_log < 50){
+        struct context_switch *cur_entry = &log[index_log];
+        int id_to = getpid();
+        unsigned long sp_value = get_sp();
+        unsigned long pc_value = get_pc();
+        // printf("\nindex %u record task to %u sp: %X pc:%X \r\n",index_log, id_to, sp_value, pc_value);
+        cur_entry->id_to = id_to;
+        cur_entry->sp_to = sp_value;
+        cur_entry->pc_to = pc_value;
+        index_log++;
+    }
+    
  }

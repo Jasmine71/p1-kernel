@@ -17,9 +17,11 @@
 
 extern struct task_struct *current;
 extern struct task_struct * task[NR_TASKS];
-extern struct trace_log *log;
-extern struct context_switch *cur_entry;
+// extern struct trace_log *log;
+
+// extern struct context_switch *cur_entry;
 extern int nr_tasks;
+extern int index_log;
 
 
 struct cpu_context {
@@ -45,6 +47,9 @@ struct task_struct {
 	long priority;
 	long preempt_count;
 	long pid;
+	long first_time; //0 first time, 1 not first time
+	unsigned long init_sp;
+	unsigned long init_pc;
 };
 
 struct context_switch{
@@ -57,10 +62,10 @@ struct context_switch{
 	unsigned long sp_to;
 };
 
-struct trace_log{
-	struct context_switch * trace[NUM_TRACES];
-	int index;
-};
+// struct trace_log{
+// 	struct context_switch * trace[NUM_TRACES];
+// 	int index;
+// };
 
 extern void sched_init(void);
 extern void schedule(void);
@@ -70,10 +75,14 @@ extern void preempt_enable(void);
 extern void switch_to(struct task_struct* next);
 extern void cpu_switch_to(struct task_struct* prev, struct task_struct* next);
 extern int getpid();
+extern unsigned long get_pc(void);
+extern unsigned long get_sp(void);
+extern struct context_switch log[NUM_TRACES];
+extern void check_sched_time();
 
 #define INIT_TASK \
 /*cpu_context*/	{ {0,0,0,0,0,0,0,0,0,0,0,0,0}, \
-/* state etc */	0,0,1, 0,0 \
+/* state etc */	0,0,1, 0,0,1,0,0 \
 }
 
 #endif

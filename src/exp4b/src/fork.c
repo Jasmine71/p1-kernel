@@ -15,7 +15,9 @@ int copy_process(unsigned long fn, unsigned long arg)
 	p->state = TASK_RUNNING;
 	p->counter = p->priority;
 	p->preempt_count = 1; //disable preemtion until schedule_tail
-
+	p->init_pc = fn;
+	p->init_sp = (unsigned long)p + THREAD_SIZE;
+	p->first_time = 0;
 	p->cpu_context.x19 = fn;
 	p->cpu_context.x20 = arg;
 	p->cpu_context.pc = (unsigned long)ret_from_fork;
@@ -27,14 +29,14 @@ int copy_process(unsigned long fn, unsigned long arg)
 	return 0;
 }
 
-struct trace_log* create_log(){
-	preempt_disable();
-	struct trace_log *log;
+// struct trace_log* create_log(){
+// 	preempt_disable();
+// 	struct trace_log *log;
 
-	log = (struct trace_log *)get_free_page();
-	if (!log)
-		return (void*)0;
-	log->index = 0;
-	preempt_enable();
-	return log;
-}
+// 	log = (struct trace_log *)get_free_page();
+// 	if (!log)
+// 		return (void*)0;
+// 	log->index = 0;
+// 	preempt_enable();
+// 	return log;
+// }
