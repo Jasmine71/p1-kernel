@@ -28,15 +28,3 @@ int copy_process(unsigned long fn, unsigned long arg)
 	preempt_enable();
 	return 0;
 }
-
-// struct trace_log* create_log(){
-// 	preempt_disable();
-// 	struct trace_log *log;
-
-// 	log = (struct trace_log *)get_free_page();
-// 	if (!log)
-// 		return (void*)0;
-// 	log->index = 0;
-// 	preempt_enable();
-// 	return log;
-// }
