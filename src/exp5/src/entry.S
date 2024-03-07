@@ -176,11 +176,18 @@ el0_sync:
 	lsr	x24, x25, #ESR_ELx_EC_SHIFT		// exception class
 	cmp	x24, #ESR_ELx_EC_SVC64			// is the currrent exception caused by SVC in 64-bit state? 
 	b.eq	el0_svc						// if yes, jump to below for handling syscalls 
+	b el0_other
 	handle_invalid_entry 0, SYNC_ERROR
 
 sc_nr	.req	x25					// number of system calls
 scno	.req	x26					// syscall number
 stbl	.req	x27					// syscall table pointer
+
+el0_other:
+	mrs x0, ELR_EL1    // Get the address of the faulty instruction
+	add x0, x0, #4     // Increment by 4 to point to the next instruction
+	msr ELR_EL1, x0
+	kernel_exit 0
 
 // the syscall path (cont'd)
 el0_svc:

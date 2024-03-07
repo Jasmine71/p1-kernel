@@ -17,10 +17,12 @@
 void user_process1(char *array)
 {
 	char buf[2] = {0};
-	while (1){
+	while (1){ 
+	// for (int j = 0; j < 5; j++){
 		for (int i = 0; i < 5; i++){
 			buf[0] = array[i];
 			call_sys_write(buf);
+			asm("mrs x0, ESR_EL1");
 			delay(DELAYS);
 		}
 	}
